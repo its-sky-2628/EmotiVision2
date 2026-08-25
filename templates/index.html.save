@@ -1,7 +1,7 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>EmotiVision — AI Emotion Detector</title>
@@ -697,7 +697,6 @@ body{
 }
 </style>
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
 <body>
@@ -712,17 +711,17 @@ body{
     </div>
 
     <div class="nav-links">
-    <a href="/" class="active">Home</a>
-    <a href="/features">Features</a>
-    <a href="/how-it-works">How It Works</a>
-    <a href="/about">About</a>
-    <a href="/blog">Blog</a>
-</div>
+        <a href="#home" class="active">Home</a>
+        <a href="#features">Features</a>
+        <a href="#how">How It Works</a>
+        <a href="#about">About</a>
+        <a href="#blog">Blog</a>
+    </div>
 
-<div class="nav-actions">
-    <a href="/auth" class="signin">♙&nbsp; Sign In</a>
-    <a href="/auth" class="started">Get Started →</a>
-</div>
+    <div class="nav-actions">
+        <button class="signin">♙&nbsp; Sign In</button>
+        <button class="started" onclick="startDetection()">Get Started →</button>
+    </div>
 </nav>
 
 <main id="home">
@@ -1504,315 +1503,5 @@ function updateEmotion(emotion,confidence){
 }
 </script>
 
-
-
-
-
-
-
-
-
-
-
-
-<section class="analytics-preview">
-
-<h2>Emotion Analytics Dashboard</h2>
-
-<p>
-Visualize AI-powered emotion insights in real time.
-</p>
-
-<div class="analytics-box">
-
-<div class="emotion-bars">
-
-<div>
-<span>Happy</span>
-<div class="bar"><i style="width:85%"></i></div>
-</div>
-
-<div>
-<span>Neutral</span>
-<div class="bar"><i style="width:45%"></i></div>
-</div>
-
-<div>
-<span>Surprise</span>
-<div class="bar"><i style="width:65%"></i></div>
-</div>
-
-</div>
-
-
-<div class="ai-status">
-
-<h3>AI Status</h3>
-
-<p>✓ Face Detected</p>
-<p>✓ Emotion Analyzed</p>
-<p>✓ Real-Time Processing</p>
-
-</div>
-
-</div>
-
-</section>
-
-
-
-<section class="emotion-dashboard">
-
-<div class="dashboard-left">
-
-<h1>
-Understand <span>Emotions.</span><br>
-Enhance Connections.
-</h1>
-
-<p>
-EmotiVision uses advanced AI to detect and analyze human emotions
-in real time, helping you understand feelings better.
-</p>
-
-<div class="dashboard-buttons">
-<button>Start Analyzing →</button>
-<button class="secondary">Learn More</button>
-</div>
-
-</div>
-
-
-<div class="dashboard-card">
-
-<div class="live-box">
-
-<h3>Live Emotion Preview</h3>
-
-<div class="emoji-circle">
-😊
-</div>
-
-<h2>Happy</h2>
-<p>Confidence: 92%</p>
-
-</div>
-
-
-<div class="chart-box">
-
-<h3>Emotion Distribution</h3>
-
-<canvas id="emotionDistributionChart" width="250" height="250"></canvas>
-
-<script>
-new Chart(
-document.getElementById("emotionDistributionChart"),
-{
-type:"doughnut",
-
-data:{
-labels:[
-"Happy",
-"Neutral",
-"Surprise",
-"Sad",
-"Angry"
-],
-
-datasets:[{
-data:[42,28,16,8,4],
-borderWidth:0
-}]
-},
-
-options:{
-cutout:"70%",
-plugins:{
-legend:{
-position:"bottom"
-}
-}
-}
-
-});
-</script>
-
-</div>
-
-</div>
-
-</section>
-
-
-<section class="ai-features">
-
-<div>
-<h3>⚡ Real-time Detection</h3>
-<p>Instant emotion recognition with live camera feed.</p>
-</div>
-
-<div>
-<h3>📊 AI Confidence Score</h3>
-<p>Accurate emotion probability analysis.</p>
-</div>
-
-<div>
-<h3>🛡 Privacy Focused</h3>
-<p>Your data remains secure.</p>
-</div>
-
-<div>
-<h3>🚀 Fast & Efficient</h3>
-<p>Optimized AI processing performance.</p>
-</div>
-
-</section>
-
-
-<script>
-const ctx = document.getElementById('emotionDistributionChart');
-
-if(ctx){
-new Chart(ctx,{
-type:'doughnut',
-data:{
-labels:['Happy','Neutral','Surprise','Sad','Angry'],
-datasets:[{
-data:[42,28,16,8,4],
-borderWidth:0
-}]
-},
-options:{
-cutout:'65%',
-plugins:{
-legend:{
-position:'bottom'
-}
-}
-}
-});
-}
-</script>
-
-
-
-<div class="ai-extra-panel">
-
-<div class="history-card">
-<h3>📈 Emotion History</h3>
-<ul id="emotionHistory">
-<li>No emotions detected yet</li>
-</ul>
-</div>
-
-
-<div class="faces-card">
-<h3>👥 Multiple Face Detection</h3>
-<div id="multiFaces">
-Waiting for faces...
-</div>
-</div>
-
-
-<div class="suggestion-card">
-<h3>🧠 AI Suggestion</h3>
-<p id="aiSuggestion">
-Waiting for emotion analysis...
-</p>
-</div>
-
-</div>
-
-
-
-<script>
-
-let emotionHistory=[];
-
-function addEmotionHistory(emotion,confidence){
-
-emotionHistory.unshift(
-emotion+" - "+confidence+"%"
-);
-
-emotionHistory=emotionHistory.slice(0,5);
-
-document.getElementById("emotionHistory").innerHTML =
-emotionHistory.map(
-x=>"<li>"+x+"</li>"
-).join("");
-
-}
-
-
-function updateSuggestion(emotion){
-
-let msg={
-happy:"Great mood! Keep maintaining positive energy 😊",
-sad:"Try taking a short break and relaxing 🌿",
-angry:"Consider a breathing exercise to calm down 🧘",
-neutral:"Everything looks balanced 👍",
-surprise:"You seem surprised! Stay aware 👀"
-};
-
-document.getElementById("aiSuggestion").innerHTML =
-msg[emotion] || "Emotion analyzed successfully";
-
-}
-
-</script>
-
 </body>
-
 </html>
-
-
-
-
-
-<script>
-
-new Chart(
-document.getElementById('emotionChart'),
-{
-type:'doughnut',
-
-data:{
-labels:[
-'Happy',
-'Neutral',
-'Surprise',
-'Sad',
-'Angry'
-],
-
-datasets:[{
-
-data:[
-42,
-28,
-16,
-8,
-4
-],
-
-borderWidth:0
-
-}]
-},
-
-options:{
-cutout:'70%',
-
-plugins:{
-legend:{
-position:'bottom'
-}
-}
-
-}
-
-});
-
-</script>

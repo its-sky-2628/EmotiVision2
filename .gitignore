@@ -1,6 +1,21 @@
-venv/
+# Python
 __pycache__/
 *.pyc
-.DS_Store
+.env
+
+# Backups
+*_backup*
+*_before*
+*_old*
+*_current*
+*.bak
+
+# Logs
 *.log
-requirements_backup.txt
+
+# Database
+*.db
+
+# Node
+node_modules/
+

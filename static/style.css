@@ -1,0 +1,968 @@
+
+
+.animated-border{
+    position:relative;
+    background:white;
+    border-radius:20px;
+    overflow:hidden;
+    z-index:1;
+}
+
+.animated-border::before{
+    content:"";
+    position:absolute;
+    inset:-3px;
+    background:conic-gradient(
+        from 0deg,
+        #ff2d95,
+        #7b2cff,
+        #00d4ff,
+        #ff2d95
+    );
+    animation:rotateBorder 3s linear infinite;
+    z-index:-2;
+}
+
+.animated-border::after{
+    content:"";
+    position:absolute;
+    inset:3px;
+    background:white;
+    border-radius:18px;
+    z-index:-1;
+}
+
+@keyframes rotateBorder{
+    100%{
+        transform:rotate(360deg);
+    }
+}
+
+.ai-highlight{
+    padding:60px 8%;
+    text-align:center;
+}
+
+.highlight-card{
+    max-width:700px;
+    margin:auto;
+}
+
+.highlight-card h3{
+    font-size:32px;
+    color:#151b32;
+}
+
+.highlight-card p{
+    color:#666;
+    font-size:17px;
+    line-height:1.6;
+}
+
+
+.mini-cards{
+    display:flex;
+    justify-content:center;
+    gap:25px;
+    margin-top:35px;
+    flex-wrap:wrap;
+}
+
+
+.mini-card{
+    width:250px;
+    padding:25px;
+    background:white;
+    border-radius:18px;
+    box-shadow:0 10px 30px rgba(0,0,0,0.08);
+    text-align:left;
+}
+
+
+.mini-card h4{
+    color:#222;
+    margin-bottom:10px;
+}
+
+
+.mini-card p{
+    color:#666;
+    line-height:1.5;
+}
+
+
+@media(max-width:768px){
+    .mini-card{
+        width:90%;
+    }
+}
+
+
+.emotion-intelligence{
+padding:70px 8%;
+text-align:center;
+}
+
+.emotion-intelligence h2{
+font-size:36px;
+color:#151b32;
+}
+
+.subtitle{
+color:#666;
+font-size:18px;
+}
+
+.insight-panel{
+margin:40px auto;
+max-width:850px;
+padding:40px;
+background:linear-gradient(135deg,#ffffff,#faf0ff);
+border-radius:30px;
+display:flex;
+align-items:center;
+justify-content:center;
+gap:50px;
+box-shadow:0 20px 50px rgba(0,0,0,.08);
+}
+
+.pulse .circle{
+width:140px;
+height:140px;
+border-radius:50%;
+background:linear-gradient(135deg,#a855f7,#ec4899);
+animation:pulseAI 2s infinite;
+}
+
+.stats{
+display:flex;
+gap:30px;
+}
+
+.stats h3{
+font-size:28px;
+margin:0;
+color:#222;
+}
+
+.stats p{
+color:#666;
+}
+
+@keyframes pulseAI{
+50%{
+transform:scale(1.12);
+box-shadow:0 0 40px #ec4899;
+}
+}
+
+
+@media(max-width:700px){
+.insight-panel{
+flex-direction:column;
+}
+
+.stats{
+flex-direction:column;
+}
+
+}
+
+
+
+.analytics-preview{
+padding:60px 8%;
+text-align:center;
+}
+
+.analytics-preview h2{
+font-size:34px;
+color:#151b32;
+}
+
+.analytics-preview p{
+color:#666;
+}
+
+
+.analytics-box{
+margin-top:35px;
+display:flex;
+justify-content:center;
+gap:40px;
+flex-wrap:wrap;
+}
+
+
+.emotion-bars,
+.ai-status{
+background:white;
+padding:30px;
+border-radius:22px;
+width:320px;
+box-shadow:0 15px 35px rgba(0,0,0,.08);
+text-align:left;
+}
+
+
+.bar{
+height:8px;
+background:#eee;
+border-radius:10px;
+margin:10px 0 20px;
+}
+
+
+.bar i{
+display:block;
+height:100%;
+background:linear-gradient(90deg,#9b5cff,#ff5c8a);
+border-radius:10px;
+}
+
+
+.ai-status p{
+color:#333;
+}
+
+
+@media(max-width:700px){
+.analytics-box{
+flex-direction:column;
+align-items:center;
+}
+
+}
+
+
+.emotion-dashboard{
+padding:80px 6%;
+display:flex;
+justify-content:space-between;
+align-items:center;
+gap:40px;
+background:#fffafa;
+}
+
+
+.dashboard-left{
+max-width:500px;
+}
+
+
+.dashboard-left h1{
+font-size:52px;
+color:#111827;
+}
+
+
+.dashboard-left span{
+color:#c23cff;
+}
+
+
+.dashboard-left p{
+font-size:18px;
+color:#666;
+line-height:1.7;
+}
+
+
+.dashboard-buttons button{
+padding:15px 30px;
+border:none;
+border-radius:12px;
+background:linear-gradient(90deg,#9b2cff,#ff4d8d);
+color:white;
+font-size:16px;
+margin-right:15px;
+}
+
+
+.dashboard-buttons .secondary{
+background:white;
+color:#222;
+border:1px solid #ddd;
+}
+
+
+.dashboard-card{
+background:white;
+padding:35px;
+border-radius:30px;
+display:flex;
+gap:35px;
+box-shadow:0 20px 50px #00000015;
+}
+
+
+.emoji-circle{
+width:120px;
+height:120px;
+border-radius:50%;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:60px;
+background:#fff0fa;
+}
+
+
+.live-box h2{
+color:#c23cff;
+}
+
+
+.chart-item{
+padding:12px;
+display:flex;
+justify-content:space-between;
+}
+
+
+.ai-features{
+display:flex;
+gap:25px;
+padding:50px 6%;
+}
+
+
+.ai-features div{
+background:white;
+padding:25px;
+border-radius:20px;
+box-shadow:0 10px 30px #00000010;
+flex:1;
+}
+
+
+@media(max-width:900px){
+.emotion-dashboard{
+flex-direction:column;
+}
+
+.dashboard-card{
+flex-direction:column;
+}
+
+.ai-features{
+flex-direction:column;
+}
+
+}
+
+
+/* Move analytics section upward */
+.analytics-preview,
+
+/* Remove extra empty space */
+body{
+    overflow-x:hidden;
+}
+
+
+
+.emotion-dashboard{
+    transform: translateY(-30px);
+}
+
+
+.emotion-dashboard{
+    transform: translateY(-30px) !important;
+}
+
+
+.emotion-dashboard{
+    margin-top:0 !important;
+    transform:none !important;
+    padding-top:20px !important;
+}
+
+.ai-features{
+    margin-top:0 !important;
+}
+
+section{
+    margin-bottom:0;
+}
+
+
+/* Fix huge blank space before analytics */
+.emotion-dashboard{
+    padding-top:0 !important;
+    margin-top:-80px !important;
+}
+
+.emotion-dashboard h2{
+    margin-top:0 !important;
+}
+
+
+/* Move analytics dashboard upward */
+.analytics-preview{
+    margin-top:-120px !important;
+    padding-top:0 !important;
+}
+
+.analytics-preview h2{
+    margin-top:0 !important;
+}
+
+
+.analytics-preview{
+    margin-top:-140px !important;
+}
+
+
+
+
+.analytics-preview{
+
+    margin-top:-160px !important;
+
+}
+
+
+
+
+
+
+.analytics-preview{
+
+    margin-top:-180px !important;
+
+}
+
+
+
+
+
+
+.analytics-preview{
+
+    margin-top:-240px !important;
+
+}
+
+
+
+
+
+
+.analytics-preview{
+
+    margin-top:-280px !important;
+
+}
+
+
+
+
+
+
+.analytics-preview{
+
+    margin-top:-340px !important;
+
+}
+
+
+
+
+
+
+.analytics-preview{
+
+    margin-top:-380px !important;
+
+}
+
+
+
+
+
+
+.analytics-preview{
+
+    margin-top:-420px !important;
+
+}
+
+
+
+
+
+
+.analytics-preview{
+
+    margin-top:-430px !important;
+
+}
+
+
+
+
+
+
+.analytics-preview{
+
+    margin-top:-450px !important;
+
+}
+
+
+
+
+
+
+.analytics-preview{
+
+    margin-top:-470px !important;
+
+}
+
+
+
+
+
+
+.analytics-preview{
+
+    margin-top:-490px !important;
+
+}
+
+
+
+
+
+
+.analytics-preview{
+
+    margin-top:-510px !important;
+
+}
+
+
+
+
+
+
+.analytics-preview{
+
+    margin-top:-520px !important;
+
+}
+
+
+
+
+
+/* Fix spacing between analytics dashboard and hero section */
+.analytics-preview{
+    margin-bottom:120px !important;
+}
+
+.hero-section{
+    margin-top:80px !important;
+}
+
+
+
+#emotionDistributionChart{
+width:230px !important;
+height:230px !important;
+margin:20px auto;
+}
+
+
+
+.ai-extra-panel{
+display:flex;
+gap:25px;
+padding:40px 6%;
+}
+
+.ai-extra-panel div{
+background:white;
+padding:25px;
+border-radius:20px;
+box-shadow:0 10px 30px #00000015;
+flex:1;
+}
+
+
+#emotionHistory{
+padding-left:20px;
+}
+
+
+@media(max-width:900px){
+
+.ai-extra-panel{
+flex-direction:column;
+}
+
+}
+
+
+
+
+/* Hero right image adjustment */ 
+.hero-right,
+.hero-image,
+.hero-visual,
+.hero img {
+    transform: translateY(-70px);
+}
+
+
+/* Premium Navbar Upgrade */
+nav,
+.navbar {
+    backdrop-filter: blur(15px);
+    background: rgba(255,255,255,0.75);
+    border-bottom: 1px solid rgba(0,0,0,0.06);
+    box-shadow: 0 8px 30px rgba(0,0,0,0.04);
+}
+
+
+.navbar a,
+nav a {
+    font-weight:600;
+    transition:0.3s ease;
+}
+
+
+.navbar a:hover,
+nav a:hover {
+    color:#c026d3;
+}
+
+
+.navbar .signin,
+.signin {
+    border-radius:14px;
+    padding:12px 28px;
+    border:1px solid #ddd;
+    background:white;
+}
+
+
+.navbar .get-started,
+.get-started {
+    border-radius:14px;
+    padding:14px 32px;
+    background:linear-gradient(135deg,#a855f7,#ec4899);
+    color:white;
+    box-shadow:0 10px 25px rgba(236,72,153,.25);
+}
+
+
+/* Trusted Users Avatar Upgrade */
+
+.trusted-users{
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
+
+
+.trusted-users .avatar,
+.trusted-users span{
+    width:42px;
+    height:42px;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:linear-gradient(135deg,#a855f7,#ec4899);
+    color:white;
+    font-weight:700;
+    border:3px solid white;
+    margin-left:-12px;
+    box-shadow:0 8px 20px rgba(0,0,0,.15);
+}
+
+
+.trusted-users .avatar:first-child,
+.trusted-users span:first-child{
+    margin-left:0;
+}
+
+
+.trusted-users::after{
+    content:"+10K";
+    width:42px;
+    height:42px;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:#111827;
+    color:white;
+    font-size:12px;
+    font-weight:700;
+}
+
+
+
+/* Trusted users premium avatar design */
+
+.trusted{
+    display:flex;
+    align-items:center;
+    gap:15px;
+}
+
+
+.faces{
+    display:flex;
+    align-items:center;
+}
+
+
+.faces span{
+    width:38px;
+    height:38px;
+    border-radius:50%;
+    margin-left:-10px;
+    border:3px solid white;
+    background:
+    linear-gradient(135deg,#8b5cf6,#ec4899);
+    box-shadow:0 6px 18px rgba(0,0,0,0.15);
+    position:relative;
+}
+
+
+.faces span:first-child{
+    margin-left:0;
+}
+
+
+.faces span:nth-child(2){
+    background:linear-gradient(135deg,#06b6d4,#3b82f6);
+}
+
+
+.faces span:nth-child(3){
+    background:linear-gradient(135deg,#f59e0b,#ef4444);
+}
+
+
+.faces span:nth-child(4){
+    background:linear-gradient(135deg,#10b981,#14b8a6);
+}
+
+
+.faces span:nth-child(5){
+    background:linear-gradient(135deg,#6366f1,#a855f7);
+}
+
+
+.trusted > span{
+    font-weight:600;
+    color:#4b5563;
+}
+
+
+
+
+
+
+/* Clean Premium Analytics UI */
+
+.analytics-box{
+    display:flex;
+    gap:25px;
+    flex-wrap:wrap;
+}
+
+
+.chart-box{
+    background:#ffffff;
+    border:1px solid #eee;
+    border-radius:28px;
+    padding:28px;
+    box-shadow:0 12px 35px rgba(0,0,0,0.06);
+}
+
+
+.chart-box h3{
+    font-size:20px;
+    margin-bottom:22px;
+    color:#111827;
+}
+
+
+.chart-item{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    width:260px;
+    padding:14px 18px;
+    margin:12px 0;
+    background:#f8fafc;
+    border-radius:50px;
+    font-weight:600;
+    transition:.3s;
+}
+
+
+.chart-item:hover{
+    transform:translateX(6px);
+    background:#f3e8ff;
+}
+
+
+.chart-item b{
+    background:linear-gradient(135deg,#8b5cf6,#ec4899);
+    color:white;
+    padding:5px 12px;
+    border-radius:20px;
+    font-size:13px;
+}
+
+
+
+/* AI Status */
+
+.ai-status{
+    background:white;
+    border:1px solid #eee;
+    border-radius:28px;
+    padding:28px;
+    box-shadow:0 12px 35px rgba(0,0,0,.06);
+}
+
+
+.ai-status h3{
+    color:#111827;
+}
+
+
+.ai-status p{
+    padding:12px 15px;
+    border-radius:14px;
+    background:#f0fdf4;
+    color:#15803d;
+    font-weight:600;
+    margin:12px 0;
+}
+
+
+.ai-status p::first-letter{
+    color:#22c55e;
+}
+
+
+
+
+/* Premium Emotion Pills */
+
+.chart-item{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:15px 20px;
+    margin:14px 0;
+    border-radius:18px;
+    background:linear-gradient(135deg,#ffffff,#f8fafc);
+    border:1px solid #eeeeee;
+    box-shadow:0 8px 20px rgba(0,0,0,0.05);
+    font-size:16px;
+    font-weight:700;
+    transition:0.3s ease;
+}
+
+
+.chart-item:hover{
+    transform:translateY(-3px);
+    box-shadow:0 12px 25px rgba(0,0,0,0.1);
+}
+
+
+/* Emotion percentage badge */
+
+.chart-item b{
+    padding:7px 16px;
+    border-radius:30px;
+    color:white;
+    background:linear-gradient(135deg,#8b5cf6,#ec4899);
+    font-size:14px;
+}
+
+
+/* Individual emotion colors */
+
+.chart-item:nth-child(2) b{
+    background:linear-gradient(135deg,#22c55e,#16a34a);
+}
+
+.chart-item:nth-child(3) b{
+    background:linear-gradient(135deg,#64748b,#334155);
+}
+
+.chart-item:nth-child(4) b{
+    background:linear-gradient(135deg,#f59e0b,#ea580c);
+}
+
+
+
+
+/* Colorful Emotion Cards */
+
+.chart-item{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:18px 22px;
+    margin:15px 0;
+    border-radius:22px;
+    color:white;
+    font-size:17px;
+    font-weight:700;
+    box-shadow:0 12px 25px rgba(0,0,0,0.12);
+    border:none;
+}
+
+
+/* Happy */
+.chart-item:nth-of-type(1){
+    background:linear-gradient(135deg,#22c55e,#16a34a);
+}
+
+
+/* Neutral */
+.chart-item:nth-of-type(2){
+    background:linear-gradient(135deg,#64748b,#334155);
+}
+
+
+/* Surprise */
+.chart-item:nth-of-type(3){
+    background:linear-gradient(135deg,#f59e0b,#ea580c);
+}
+
+
+/* Sad */
+.chart-item:nth-of-type(4){
+    background:linear-gradient(135deg,#3b82f6,#2563eb);
+}
+
+
+/* Angry */
+.chart-item:nth-of-type(5){
+    background:linear-gradient(135deg,#ef4444,#b91c1c);
+}
+
+
+.chart-item b{
+    background:rgba(255,255,255,0.25);
+    backdrop-filter:blur(10px);
+    padding:7px 15px;
+    border-radius:30px;
+    color:white;
+}
+
+
