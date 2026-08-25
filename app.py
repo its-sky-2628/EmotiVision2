@@ -3,6 +3,13 @@ import sqlite3
 import traceback
 import cv2
 import numpy as np
+import os
+os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
+os.environ["TF_CPP_MIN_LOG_LEVEL"] = "2"
+
+# Now import TensorFlow/Keras
+import tensorflow as tf
+
 
 from flask import Flask, request, jsonify, render_template, session
 from flask_cors import CORS
