@@ -1,9 +1,13 @@
 import os
 
-# IMPORTANT:
-# TensorFlow / DeepFace import se PEHLE CPU mode set karo
+# =========================================================
+# RENDER / CPU ONLY CONFIG
+# MUST COME BEFORE TENSORFLOW / DEEPFACE IMPORTS
+# =========================================================
+
 os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
 os.environ["TF_CPP_MIN_LOG_LEVEL"] = "3"
+os.environ["TF_ENABLE_ONEDNN_OPTS"] = "0"
 
 import sqlite3
 import traceback
@@ -11,6 +15,18 @@ import traceback
 import cv2
 import numpy as np
 import tensorflow as tf
+
+# Explicitly tell TensorFlow to use CPU
+try:
+    tf.config.set_visible_devices([], "GPU")
+except Exception:
+    pass
+
+from flask import Flask, request, jsonify, render_template, session
+from flask_cors import CORS
+from deepface import DeepFace
+from werkzeug.security import generate_password_hash, check_password_hash
+
 
 from flask import Flask, request, jsonify, render_template, session
 from flask_cors import CORS
