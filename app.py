@@ -1,32 +1,25 @@
 import os
+
+# IMPORTANT:
+# TensorFlow / DeepFace import se PEHLE CPU mode set karo
+os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
+os.environ["TF_CPP_MIN_LOG_LEVEL"] = "3"
+
 import sqlite3
 import traceback
+
 import cv2
 import numpy as np
-import os
-os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
-os.environ["TF_CPP_MIN_LOG_LEVEL"] = "2"
-
-# Now import TensorFlow/Keras
 import tensorflow as tf
-
 
 from flask import Flask, request, jsonify, render_template, session
 from flask_cors import CORS
-from deepface import DeepFace
 from werkzeug.security import generate_password_hash, check_password_hash
+from deepface import DeepFace
 
 
 app = Flask(__name__)
-@app.route("/api/cv2-test")
-def cv2_test():
-    import cv2
-    return {
-        "cv2_file": str(getattr(cv2, "__file__", None)),
-        "cv2_version": str(getattr(cv2, "__version__", None)),
-        "cascade": str(hasattr(cv2, "CascadeClassifier")),
-        "cv2_dir_has_cascade": str("CascadeClassifier" in dir(cv2))
-    }
+
 app.secret_key = os.environ.get(
     "SECRET_KEY",
     "emotivision-development-secret"
@@ -34,23 +27,50 @@ app.secret_key = os.environ.get(
 
 CORS(app)
 
-# Ensure OpenCV Haar Cascade is available for DeepFace
-CASCADE_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "cv2_data", "haarcascade_frontalface_default.xml")
+
+# =========================================================
+# OPENCV CASCADE
+# =========================================================
+
+CASCADE_PATH = os.path.join(
+    os.path.dirname(os.path.abspath(__file__)),
+    "cv2_data",
+    "haarcascade_frontalface_default.xml"
+)
+
 if os.path.exists(CASCADE_PATH):
-    cv2.data.haarcascades = os.path.dirname(CASCADE_PATH) + os.sep
+    cv2.data.haarcascades = (
+        os.path.dirname(CASCADE_PATH) + os.sep
+    )
+
+
+# =========================================================
+# DATABASE
+# =========================================================
+
+DB_PATH = os.path.join(
+    os.path.dirname(os.path.abspath(__file__)),
+    "users.db"
+)
+
+
+def get_db():
+    return sqlite3.connect(DB_PATH)
 
 
 def init_auth_db():
-    conn = sqlite3.connect("users.db")
+    conn = get_db()
 
     conn.execute(
-        """CREATE TABLE IF NOT EXISTS users (
+        """
+        CREATE TABLE IF NOT EXISTS users (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             name TEXT NOT NULL,
             email TEXT UNIQUE NOT NULL,
             password TEXT NOT NULL,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-        )"""
+        )
+        """
     )
 
     conn.commit()
@@ -59,6 +79,10 @@ def init_auth_db():
 
 init_auth_db()
 
+
+# =========================================================
+# PAGES
+# =========================================================
 
 @app.route("/")
 def home():
@@ -90,8 +114,13 @@ def auth_page():
     return render_template("auth.html")
 
 
+# =========================================================
+# AUTH
+# =========================================================
+
 @app.route("/api/signup", methods=["POST"])
 def signup():
+
     data = request.get_json(silent=True) or {}
 
     name = str(data.get("name", "")).strip()
@@ -111,10 +140,15 @@ def signup():
         }), 400
 
     try:
-        conn = sqlite3.connect("users.db")
+
+        conn = get_db()
 
         conn.execute(
-            "INSERT INTO users (name, email, password) VALUES (?, ?, ?)",
+            """
+            INSERT INTO users
+            (name, email, password)
+            VALUES (?, ?, ?)
+            """,
             (
                 name,
                 email,
@@ -135,20 +169,25 @@ def signup():
         })
 
     except sqlite3.IntegrityError:
+
         return jsonify({
             "success": False,
             "error": "This email is already registered."
         }), 409
 
     except Exception as e:
+
+        traceback.print_exc()
+
         return jsonify({
             "success": False,
-            "error": str(e)
+            "error": "Unable to create account."
         }), 500
 
 
 @app.route("/api/login", methods=["POST"])
 def login():
+
     data = request.get_json(silent=True) or {}
 
     email = str(data.get("email", "")).strip().lower()
@@ -160,16 +199,21 @@ def login():
             "error": "Email and password are required."
         }), 400
 
-    conn = sqlite3.connect("users.db")
+    conn = get_db()
 
     row = conn.execute(
-        "SELECT name, email, password FROM users WHERE email = ?",
+        """
+        SELECT name, email, password
+        FROM users
+        WHERE email = ?
+        """,
         (email,)
     ).fetchone()
 
     conn.close()
 
     if not row or not check_password_hash(row[2], password):
+
         return jsonify({
             "success": False,
             "error": "Invalid email or password."
@@ -187,6 +231,7 @@ def login():
 
 @app.route("/api/logout", methods=["POST"])
 def logout():
+
     session.clear()
 
     return jsonify({
@@ -198,6 +243,7 @@ def logout():
 def current_user():
 
     if "user_email" not in session:
+
         return jsonify({
             "logged_in": False
         })
@@ -209,31 +255,67 @@ def current_user():
     })
 
 
+# =========================================================
+# HEALTH
+# =========================================================
+
+@app.route("/api/health")
+def health():
+
+    return jsonify({
+        "status": "ok",
+        "service": "Face Emotion Detection API"
+    })
+
+
+@app.route("/api/cv2-test")
+def cv2_test():
+
+    return jsonify({
+        "cv2_file": str(getattr(cv2, "__file__", None)),
+        "cv2_version": str(getattr(cv2, "__version__", None)),
+        "cascade_classifier": hasattr(cv2, "CascadeClassifier"),
+        "cascade_path": CASCADE_PATH,
+        "cascade_exists": os.path.exists(CASCADE_PATH)
+    })
+
+
+# =========================================================
+# EMOTION ANALYSIS
+# =========================================================
+
 @app.route("/api/analyze-face", methods=["POST"])
 def analyze_face():
 
     if "image" not in request.files:
+
         return jsonify({
             "success": False,
-            "error": "No image provided"
+            "error": "No image provided."
         }), 400
 
     image_file = request.files["image"]
 
-    if not image_file or image_file.filename == "":
+    if not image_file or not image_file.filename:
+
         return jsonify({
             "success": False,
-            "error": "Empty image file"
+            "error": "Empty image file."
         }), 400
 
     try:
 
+        # -------------------------------------------------
+        # Read image
+        # -------------------------------------------------
+
         image_bytes = image_file.read()
 
         if not image_bytes:
+
             return jsonify({
                 "success": False,
-                "error": "Image file is empty"
+                "error": "Image file is empty."
             }), 400
 
         image_array = np.frombuffer(
@@ -247,54 +329,95 @@ def analyze_face():
         )
 
         if frame is None:
+
             return jsonify({
                 "success": False,
-                "error": "Could not decode image"
+                "error": "Could not decode image."
             }), 400
 
-        print("======================================")
-        print("Starting DeepFace analysis...")
-        print("Image shape:", frame.shape)
-        print("======================================")
+        # -------------------------------------------------
+        # Resize very large camera frames
+        # -------------------------------------------------
+
+        max_width = 960
+
+        if frame.shape[1] > max_width:
+
+            scale = max_width / frame.shape[1]
+
+            frame = cv2.resize(
+                frame,
+                (
+                    int(frame.shape[1] * scale),
+                    int(frame.shape[0] * scale)
+                )
+            )
+
+        # -------------------------------------------------
+        # DeepFace
+        # -------------------------------------------------
+
+        print(
+            f"Analyzing frame: {frame.shape}"
+        )
 
         results = DeepFace.analyze(
             img_path=frame,
             actions=["emotion"],
-            detector_backend="retinaface",
+            detector_backend="opencv",
             enforce_detection=False,
             silent=True
         )
-
-        print("DeepFace analysis completed successfully.")
 
         if isinstance(results, dict):
             results = [results]
 
         faces = []
 
-        for number, result in enumerate(results, start=1):
+        # -------------------------------------------------
+        # Process detected faces
+        # -------------------------------------------------
+
+        for number, result in enumerate(
+            results,
+            start=1
+        ):
 
             region = result.get("region") or {}
-            emotions_raw = result.get("emotion") or {}
 
-            width = int(region.get("w", 0) or 0)
-            height = int(region.get("h", 0) or 0)
+            emotions_raw = (
+                result.get("emotion") or {}
+            )
 
-            if width <= 0 or height <= 0:
+            x = int(region.get("x", 0) or 0)
+            y = int(region.get("y", 0) or 0)
+            w = int(region.get("w", 0) or 0)
+            h = int(region.get("h", 0) or 0)
+
+            if w <= 0 or h <= 0:
                 continue
 
             emotions = {}
 
-            for name, score in emotions_raw.items():
+            for emotion_name, score in emotions_raw.items():
 
                 try:
-                    emotions[str(name)] = round(
+
+                    emotions[
+                        str(emotion_name).lower()
+                    ] = round(
                         float(score),
                         2
                     )
 
-                except (TypeError, ValueError):
-                    emotions[str(name)] = 0.0
+                except (
+                    TypeError,
+                    ValueError
+                ):
+
+                    emotions[
+                        str(emotion_name).lower()
+                    ] = 0.0
 
             dominant = str(
                 result.get(
@@ -319,20 +442,29 @@ def analyze_face():
                 "confidence": confidence,
                 "emotions": emotions,
                 "region": {
-                    "x": int(region.get("x", 0) or 0),
-                    "y": int(region.get("y", 0) or 0),
-                    "w": width,
-                    "h": height
+                    "x": x,
+                    "y": y,
+                    "w": w,
+                    "h": h
                 }
             })
 
+        # -------------------------------------------------
+        # No face
+        # -------------------------------------------------
+
         if not faces:
+
             return jsonify({
                 "success": False,
                 "face_count": 0,
                 "faces": [],
-                "error": "No face detected"
+                "error": "No face detected."
             }), 200
+
+        # -------------------------------------------------
+        # Primary face
+        # -------------------------------------------------
 
         primary = max(
             faces,
@@ -346,18 +478,15 @@ def analyze_face():
             "emotions": primary["emotions"],
             "face_count": len(faces),
             "faces": faces
-        }), 200
+        })
 
     except Exception as error:
 
-        print("\n")
-        print("DEEPFACE ANALYSIS ERROR")
-        print("\n")
-       
+        print("\n==============================")
+        print("DEEPFACE ERROR")
+        print("==============================")
 
         traceback.print_exc()
-
-        print("\n")
 
         return jsonify({
             "success": False,
@@ -365,14 +494,9 @@ def analyze_face():
         }), 500
 
 
-@app.route("/api/health")
-def health():
-
-    return jsonify({
-        "status": "ok",
-        "service": "Face Emotion Detection API"
-    })
-
+# =========================================================
+# START SERVER
+# =========================================================
 
 if __name__ == "__main__":
 
@@ -383,15 +507,12 @@ if __name__ == "__main__":
         )
     )
 
-    print("\n")
-    print("   FACE EMOTION DETECTION AI")
-    print("\n")
-    print("Server running at:")
-    print(f"http://127.0.0.1:{port}")
-    print("\n")
+    print(
+        f"EmotiVision running on port {port}"
+    )
 
     app.run(
-        debug=True,
         host="0.0.0.0",
-        port=port
+        port=port,
+        debug=False
     )
